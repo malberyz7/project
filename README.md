@@ -1,220 +1,240 @@
-frontend
-# IELTS Prep Project
+# AI Chatbot with RAG (Retrieval-Augmented Generation)
 
-This repository contains a small IELTS preparation application with:
+A complete AI-powered chatbot that answers questions based on uploaded PDF or text documents using Retrieval-Augmented Generation (RAG) with embeddings and a FAISS vector database.
 
-- Backend: FastAPI (in `/backend`)
-- Frontend: Vite + React (in `/frontend`)
+## 🚀 Features
 
-Quick start
+- **Document Upload**: Upload PDF or text files
+- **Text Extraction**: Automatically extracts text from PDFs
+- **Vector Database**: Uses FAISS for efficient similarity search
+- **RAG Implementation**: Retrieves relevant document chunks and generates answers using GPT
+- **Web Interface**: Clean, modern HTML/CSS/JS frontend
+- **REST API**: FastAPI backend with proper error handling
 
-1) Backend (Python)
+## 📁 Project Structure
+
+```
+project-1/
+├── backend/
+│   └── main.py              # FastAPI application
+├── frontend/
+│   ├── index.html           # Main HTML page
+│   ├── styles.css           # Styling
+│   └── app.js               # Frontend JavaScript
+├── utils/
+│   ├── __init__.py
+│   ├── pdf_extractor.py     # PDF text extraction
+│   ├── text_processor.py    # Text chunking utilities
+│   ├── embeddings.py        # OpenAI embedding generation
+│   ├── vector_db.py         # FAISS vector database wrapper
+│   └── gpt_client.py        # GPT API integration
+├── data/                    # Uploaded documents and vector DB
+├── requirements.txt         # Python dependencies
+└── README.md               # This file
+```
+
+## 🔧 Prerequisites
+
+1. **Python 3.8+** installed
+2. **OpenAI API Key** - Get one from [OpenAI Platform](https://platform.openai.com/api-keys)
+
+## 📦 Installation
+
+### 1. Clone or navigate to the project directory
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r backend/requirements.txt
-uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+cd project-1
 ```
 
-2) Frontend (Node)
+### 2. Create a virtual environment (recommended)
 
 ```bash
-cd frontend
-npm install
-npm run dev
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-The frontend expects the backend at `/api/*` (same host). When developing locally you can run the backend on port `8000` and configure a proxy in Vite if needed.
-
-If you want, я могу добавить: прокси-конфиг для Vite, Dockerfile, или автозагрузку данных.
-
-Serve built frontend from backend (single-server mode)
-
-1) Build frontend and start backend with one script:
-
-```bash
-cd /workspaces/project
-./start_all.sh
-```
-
-This will run `npm install` and `npm run build` in `frontend`, then start `uvicorn` which will serve the built files from `frontend/dist` together with the `/api` endpoints.
-
-2) Or build and run manually:
-
-```bash
-cd /workspaces/project/frontend
-npm install
-npm run build
-
-# then in project root
-cd /workspaces/project
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r backend/requirements.txt
-uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-After build, opening `http://localhost:8000` will serve the frontend app (index.html) and API remains available at `/api`.
-#road to $$$
-=======
-Веб-приложение с раздельной разработкой фронтенда и бэкенда.
-
-## 📁 Структура проекта
-
-```
-project/
-├── frontend/          # Фронтенд часть проекта
-│   └── frontend.html  # HTML страница
-├── backend/           # Бэкенд часть проекта
-│   └── backend.py     # Flask приложение
-├── requirements.txt   # Зависимости Python
-├── .gitignore        # Игнорируемые файлы
-└── README.md         # Документация
-
-```
-
-## 🌿 Работа с ветками Git
-
-Проект использует три основные ветки:
-
-### `main` - основная ветка
-- Содержит рабочий код, объединяющий фронтенд и бэкенд
-- **Только для слияния готового кода**
-- Никогда не коммитим напрямую в main!
-
-### `frontend` - ветка для фронтенда
-- Работайте здесь над HTML, CSS, JavaScript
-- Файлы находятся в папке `frontend/`
-
-### `backend` - ветка для бэкенда
-- Работайте здесь над Flask API
-- Файлы находятся в папке `backend/`
-
-## 🚀 Быстрый старт
-
-### 1. Установка зависимостей
+### 3. Install Python dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Запуск сервера
+### 4. Set up OpenAI API Key
+
+Create a `.env` file in the project root:
+
+```bash
+echo "OPENAI_API_KEY=your-api-key-here" > .env
+```
+
+Or set it as an environment variable:
+
+```bash
+export OPENAI_API_KEY=your-api-key-here
+```
+
+## 🚀 Running the Application
+
+### Start the Backend Server
 
 ```bash
 cd backend
-python backend.py
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Сервер запустится на `http://localhost:5000`
+Or from the project root:
 
-### 3. Открыть в браузере
-
-Откройте `http://localhost:5000` в браузере
-
-## 👥 Рабочий процесс для команды
-
-### Для разработчиков фронтенда:
-
-1. Переключитесь на ветку frontend:
 ```bash
-git checkout frontend
-git pull origin frontend
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-2. Внесите изменения в файлы в папке `frontend/`
+The server will start at `http://localhost:8000`
 
-3. Закоммитьте и отправьте:
-```bash
-git add frontend/
-git commit -m "Описание изменений"
-git push origin frontend
+### Access the Frontend
+
+Open your browser and navigate to:
+- **Frontend**: `http://localhost:8000/`
+- **API Docs**: `http://localhost:8000/docs` (Swagger UI)
+- **Alternative Docs**: `http://localhost:8000/redoc` (ReDoc)
+
+## 📚 API Endpoints
+
+### `POST /upload`
+Upload a PDF or text document for processing.
+
+**Request**: Multipart form data with `file` field
+
+**Response**:
+```json
+{
+  "message": "Document 'example.pdf' uploaded and processed successfully",
+  "chunks": 15,
+  "total_documents": 15
+}
 ```
 
-4. Когда готово к слиянию, создайте merge request или обратитесь к тимлиду
+### `POST /ask`
+Ask a question about uploaded documents.
 
-### Для разработчиков бэкенда:
-
-1. Переключитесь на ветку backend:
-```bash
-git checkout backend
-git pull origin backend
+**Request**:
+```json
+{
+  "question": "What is the main topic of this document?"
+}
 ```
 
-2. Внесите изменения в файлы в папке `backend/`
-
-3. Закоммитьте и отправьте:
-```bash
-git add backend/
-git commit -m "Описание изменений"
-git push origin backend
+**Response**:
+```json
+{
+  "answer": "Based on the document, the main topic is...",
+  "sources": [
+    "[Document Excerpt 1]: ...",
+    "[Document Excerpt 2]: ..."
+  ]
+}
 ```
 
-4. Когда готово к слиянию, создайте merge request или обратитесь к тимлиду
+### `GET /status`
+Get the status of the vector database.
 
-### Слияние в main (только после тестирования):
-
-1. Убедитесь, что код протестирован на ветках frontend и backend
-
-2. Переключитесь на main:
-```bash
-git checkout main
-git pull origin main
+**Response**:
+```json
+{
+  "status": "running",
+  "documents_in_db": 15,
+  "message": "AI Chatbot RAG API is operational"
+}
 ```
 
-3. Слейте изменения:
-```bash
-# Слияние фронтенда
-git merge frontend
+### `DELETE /clear`
+Clear all documents from the vector database.
 
-# Слияние бэкенда
-git merge backend
-```
+## 🎯 Usage Guide
 
-4. Если есть конфликты, разрешите их и затем:
-```bash
-git add .
-git commit -m "Объединение frontend и backend"
-git push origin main
-```
+1. **Start the backend server** (see instructions above)
 
-## 🔧 API Endpoints
+2. **Open the frontend** in your browser at `http://localhost:8000/`
 
-- `GET /` - Главная страница (возвращает frontend.html)
-- `GET /api/message` - Получить сообщение (JSON)
+3. **Upload a document**:
+   - Click "Choose a PDF or Text file"
+   - Select a PDF or .txt file
+   - Click "Upload Document"
+   - Wait for processing confirmation
 
-## 📝 Важные правила
+4. **Ask questions**:
+   - Type your question in the input box
+   - Click "Ask" or press Enter
+   - View the answer and the document excerpts used
 
-1. ✅ Всегда работайте в своих ветках (frontend/backend)
-2. ✅ Не коммитьте напрямую в main
-3. ✅ Тестируйте код перед слиянием
-4. ✅ Используйте понятные сообщения коммитов
-5. ✅ Обновляйте README при изменении структуры проекта
+## 🔍 How It Works
 
-## 🐛 Решение проблем
+1. **Document Upload**: When you upload a file, the system:
+   - Extracts text (PDFs are parsed, text files are read)
+   - Chunks the text into smaller pieces (1000 chars with 200 char overlap)
+   - Generates embeddings for each chunk using OpenAI
+   - Stores embeddings and text in FAISS vector database
 
-### Порт 5000 занят?
-Измените порт в `backend/backend.py`:
-```python
-app.run(debug=True, host='0.0.0.0', port=5001)  # Используйте другой порт
-```
+2. **Question Answering**: When you ask a question:
+   - System generates an embedding for your question
+   - Searches the vector database for similar document chunks (top 3)
+   - Sends the question + relevant chunks to GPT API
+   - Returns the generated answer along with source excerpts
 
-### Ошибки при установке зависимостей?
-Используйте виртуальное окружение:
-```bash
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# или
-venv\Scripts\activate     # Windows
-pip install -r requirements.txt
-```
+## 🛠️ Technology Stack
 
-## 📞 Контакты
+- **Backend**: FastAPI (Python)
+- **Frontend**: HTML, CSS, JavaScript
+- **Vector Database**: FAISS (Facebook AI Similarity Search)
+- **Embeddings**: OpenAI text-embedding-3-small
+- **LLM**: OpenAI GPT-3.5-turbo (or GPT-4)
+- **PDF Processing**: PyPDF2
 
-Если возникли вопросы по работе с проектом, обращайтесь к тимлиду.
+## ⚙️ Configuration
+
+You can modify the following in the code:
+
+- **Chunk size**: Change `chunk_size` and `overlap` in `text_processor.py` or `main.py`
+- **Embedding model**: Change `model` parameter in `embeddings.py` (default: `text-embedding-3-small`)
+- **GPT model**: Change `model` in `gpt_client.py` (default: `gpt-3.5-turbo`)
+- **Number of results**: Change `k` parameter in `/ask` endpoint (default: 3)
+
+## 🐛 Troubleshooting
+
+### "OpenAI API key not found"
+- Make sure you've set the `OPENAI_API_KEY` environment variable
+- Or create a `.env` file with your API key
+
+### "No documents uploaded yet"
+- Upload at least one document before asking questions
+
+### Port 8000 already in use
+- Change the port: `uvicorn backend.main:app --reload --port 8001`
+- Update the `API_BASE_URL` in `frontend/app.js` to match
+
+### PDF extraction errors
+- Ensure the PDF is not corrupted or password-protected
+- Try converting the PDF to text format if issues persist
+
+### Import errors
+- Make sure all dependencies are installed: `pip install -r requirements.txt`
+- Ensure you're in the correct directory when running commands
+
+## 📝 Notes
+
+- The vector database is stored in `data/faiss_index.pkl` and persists between restarts
+- Uploaded files are saved in the `data/` directory
+- For production use, consider:
+  - Using environment-specific API keys
+  - Implementing authentication
+  - Adding rate limiting
+  - Using a production-grade ASGI server
+  - Setting proper CORS origins
+
+## 📄 License
+
+This project is open source and available for educational purposes.
 
 ---
 
-**Road to $$$** 🚀
+**Happy Chatting! 🚀**
 
-main

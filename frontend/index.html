@@ -1,13 +1,62 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IELTS Prep</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-  </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot - RAG Document Q&A</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AI Document Chatbot</h1>
+            <p class="subtitle">Ask questions about your uploaded documents using RAG</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <h2>📄 Upload Document</h2>
+                <div class="upload-box">
+                    <input type="file" id="fileInput" accept=".pdf,.txt,.text" />
+                    <label for="fileInput" class="upload-label">
+                        <span class="upload-icon">📤</span>
+                        <span>Choose a PDF or Text file</span>
+                    </label>
+                    <button id="uploadBtn" class="btn btn-primary" disabled>Upload Document</button>
+                </div>
+                <div id="uploadStatus" class="status-message"></div>
+                <div id="documentsInfo" class="info-box"></div>
+            </section>
+
+            <!-- Chat Section -->
+            <section class="chat-section">
+                <h2>💬 Ask a Question</h2>
+                <div class="chat-input-container">
+                    <input 
+                        type="text" 
+                        id="questionInput" 
+                        placeholder="Type your question here..." 
+                        class="question-input"
+                    />
+                    <button id="askBtn" class="btn btn-primary">Ask</button>
+                </div>
+
+                <!-- Chat Messages -->
+                <div id="chatMessages" class="chat-messages">
+                    <div class="welcome-message">
+                        <p>👋 Welcome! Upload a document and ask questions about it.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>Powered by FastAPI, FAISS, and OpenAI GPT</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
