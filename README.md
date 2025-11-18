@@ -1,240 +1,367 @@
-# AI Chatbot with RAG (Retrieval-Augmented Generation)
+# 🤖 AI Chatbot with RAG - Document Q&A System
 
-A complete AI-powered chatbot that answers questions based on uploaded PDF or text documents using Retrieval-Augmented Generation (RAG) with embeddings and a FAISS vector database.
+A powerful, **completely free** AI-powered chatbot that answers questions about your uploaded documents using Retrieval-Augmented Generation (RAG). Upload PDFs, ask questions, and get intelligent answers - all without any API costs!
 
-## 🚀 Features
+---
 
-- **Document Upload**: Upload PDF or text files
-- **Text Extraction**: Automatically extracts text from PDFs
-- **Vector Database**: Uses FAISS for efficient similarity search
-- **RAG Implementation**: Retrieves relevant document chunks and generates answers using GPT
-- **Web Interface**: Clean, modern HTML/CSS/JS frontend
-- **REST API**: FastAPI backend with proper error handling
+## ✨ What Does This Project Do?
+
+Imagine having a smart assistant that has read all your documents and can answer any question about them instantly. That's exactly what this project does!
+
+**Simply put:**
+- 📄 Upload your PDF documents
+- 💬 Ask questions in natural language
+- 🤖 Get accurate answers based on your documents
+- 🆓 **100% free** - no OpenAI costs, no API fees!
+
+---
+
+## 🌟 Why Is This Useful?
+
+### For Students
+- Upload textbooks, lecture notes, or research papers
+- Ask questions and get instant answers
+- Perfect for studying and exam preparation
+
+### For Professionals
+- Process company documents, reports, or manuals
+- Quick access to information without reading everything
+- Great for onboarding and knowledge management
+
+### For Everyone
+- No subscription fees or API costs
+- Your data stays private (runs locally)
+- Works offline after setup
+- Unlimited usage!
+
+---
+
+## 🚀 Key Features
+
+### 🎯 Core Capabilities
+- **Document Upload**: Upload PDF or text files easily
+- **Smart Q&A**: Ask questions in natural language
+- **RAG Technology**: Uses Retrieval-Augmented Generation for accurate answers
+- **Source Tracking**: See which document excerpts were used for each answer
+
+### 💰 100% Free
+- **Local Embeddings**: Uses Sentence Transformers (no API calls)
+- **Local LLM**: Uses Ollama for free, local language models
+- **No Limits**: No rate limits or usage quotas
+- **Privacy First**: Your documents never leave your machine
+
+### 🎨 User-Friendly Interface
+- Clean, modern web interface
+- Drag-and-drop file upload
+- Real-time chat experience
+- Uploaded files management with delete option
+
+### 🛠️ Developer-Friendly
+- FastAPI backend with automatic API docs
+- Modular, well-commented code
+- Easy to extend and customize
+- Complete error handling
+
+---
+
+## 🔧 How It Works
+
+### The Magic Behind the Scenes
+
+1. **Upload & Process**
+   - You upload a PDF or text file
+   - The system extracts all text from your document
+   - Text is split into smaller, manageable chunks
+   - Each chunk is converted into a mathematical representation (embedding)
+
+2. **Storage**
+   - Embeddings are stored in a FAISS vector database
+   - This allows for super-fast similarity searches
+   - Your original text chunks are kept for reference
+
+3. **Question Answering**
+   - When you ask a question, it's also converted to an embedding
+   - The system searches for the most relevant document chunks
+   - Those chunks are sent to an AI language model (LLM)
+   - The LLM generates an answer based on the context
+   - You get the answer plus the source excerpts!
+
+### Technology Stack
+
+- **Backend**: FastAPI (modern, fast Python web framework)
+- **Frontend**: Clean HTML/CSS/JavaScript (no complex frameworks needed)
+- **Vector Database**: FAISS (Facebook AI Similarity Search)
+- **Embeddings**: Sentence Transformers (local, free)
+- **LLM**: Ollama (local) or Hugging Face API (free tier)
+- **PDF Processing**: PyPDF2
+
+---
+
+## 📦 Installation
+
+### Prerequisites
+
+- Python 3.8 or higher
+- pip (Python package manager)
+- (Optional) Ollama for best performance - [Install Guide](INSTALL_OLLAMA.md)
+
+### Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd project-1
+   ```
+
+2. **Create a virtual environment** (recommended)
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements_free.txt
+   ```
+
+4. **Install Ollama** (optional but recommended)
+   ```bash
+   # macOS
+   brew install ollama
+   
+   # Or download from https://ollama.ai/
+   ```
+
+5. **Download a language model** (if using Ollama)
+   ```bash
+   ollama pull llama3.2
+   ```
+
+6. **Start the server**
+   ```bash
+   ./start_free.sh
+   ```
+   
+   Or manually:
+   ```bash
+   source venv/bin/activate
+   cd backend
+   uvicorn main_free:app --reload --host 0.0.0.0 --port 8000
+   ```
+
+7. **Open your browser**
+   - Navigate to: `http://localhost:8000/`
+   - Start uploading and asking questions! 🎉
+
+---
+
+## 🎯 Usage
+
+### Step 1: Upload Documents
+1. Click on the upload area or "Upload PDF" button
+2. Select a PDF or text file from your computer
+3. Wait for processing (usually just a few seconds)
+4. See confirmation that your document is ready
+
+### Step 2: Ask Questions
+1. Type your question in the input box
+2. Press Enter or click "Ask"
+3. Get instant answers based on your documents!
+
+### Step 3: Manage Files
+- View all uploaded files in the "Uploaded Files" section
+- Delete any file with the 🗑️ button
+- Upload multiple files and ask questions across all of them
+
+---
+
+## 🎨 Screenshots
+
+**Upload Interface**: Drag and drop your PDF files easily  
+**Chat Interface**: Ask questions and get intelligent answers  
+**File Management**: View and manage all your uploaded documents
+
+---
+
+## 🔍 API Endpoints
+
+The backend provides a RESTful API:
+
+- `POST /upload` - Upload and process a document
+- `POST /ask` - Ask a question about uploaded documents
+- `GET /files` - List all uploaded files
+- `DELETE /files/{filename}` - Delete a specific file
+- `GET /status` - Check server and database status
+- `DELETE /clear` - Clear all documents (for testing)
+
+**Interactive API Docs**: Visit `http://localhost:8000/docs` when the server is running!
+
+---
+
+## 🆚 Free vs Paid Version
+
+We provide two versions:
+
+### 🆓 Free Version (Recommended)
+- **Location**: `backend/main_free.py`
+- **Embeddings**: Sentence Transformers (local)
+- **LLM**: Ollama (local) or Hugging Face (free)
+- **Cost**: $0
+- **Privacy**: High (local processing)
+- **Setup**: Requires model download (~90MB for embeddings, ~2GB for Ollama)
+
+### 💳 Paid Version (Optional)
+- **Location**: `backend/main.py`
+- **Embeddings**: OpenAI API
+- **LLM**: OpenAI GPT
+- **Cost**: ~$0.01-0.10 per document
+- **Privacy**: Medium (cloud processing)
+- **Setup**: Just needs API key
+
+**The free version is fully functional and recommended for most users!**
+
+---
 
 ## 📁 Project Structure
 
 ```
 project-1/
 ├── backend/
-│   └── main.py              # FastAPI application
+│   ├── main.py              # Paid version (OpenAI)
+│   └── main_free.py         # Free version (local models)
 ├── frontend/
-│   ├── index.html           # Main HTML page
-│   ├── styles.css           # Styling
-│   └── app.js               # Frontend JavaScript
+│   ├── index.html           # Main web interface
+│   ├── styles.css           # Beautiful styling
+│   └── app.js               # Frontend logic
 ├── utils/
-│   ├── __init__.py
 │   ├── pdf_extractor.py     # PDF text extraction
-│   ├── text_processor.py    # Text chunking utilities
-│   ├── embeddings.py        # OpenAI embedding generation
-│   ├── vector_db.py         # FAISS vector database wrapper
-│   └── gpt_client.py        # GPT API integration
-├── data/                    # Uploaded documents and vector DB
-├── requirements.txt         # Python dependencies
-└── README.md               # This file
+│   ├── text_processor.py    # Text chunking
+│   ├── embeddings_free.py   # Free embeddings (Sentence Transformers)
+│   ├── embeddings.py        # Paid embeddings (OpenAI)
+│   ├── vector_db.py         # FAISS database wrapper
+│   ├── gpt_client_free.py   # Free LLM client (Ollama/HF)
+│   └── gpt_client.py        # Paid LLM client (OpenAI)
+├── data/                    # Uploaded files and database
+├── requirements.txt         # Dependencies (paid version)
+├── requirements_free.txt    # Dependencies (free version)
+├── start.sh                 # Startup script (paid version)
+├── start_free.sh            # Startup script (free version)
+└── README.md                # This file!
 ```
-
-## 🔧 Prerequisites
-
-1. **Python 3.8+** installed
-2. **OpenAI API Key** - Get one from [OpenAI Platform](https://platform.openai.com/api-keys)
-
-## 📦 Installation
-
-### 1. Clone or navigate to the project directory
-
-```bash
-cd project-1
-```
-
-### 2. Create a virtual environment (recommended)
-
-```bash
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-### 3. Install Python dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Set up OpenAI API Key
-
-Create a `.env` file in the project root:
-
-```bash
-echo "OPENAI_API_KEY=your-api-key-here" > .env
-```
-
-Or set it as an environment variable:
-
-```bash
-export OPENAI_API_KEY=your-api-key-here
-```
-
-## 🚀 Running the Application
-
-### Start the Backend Server
-
-```bash
-cd backend
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-
-Or from the project root:
-
-```bash
-uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-The server will start at `http://localhost:8000`
-
-### Access the Frontend
-
-Open your browser and navigate to:
-- **Frontend**: `http://localhost:8000/`
-- **API Docs**: `http://localhost:8000/docs` (Swagger UI)
-- **Alternative Docs**: `http://localhost:8000/redoc` (ReDoc)
-
-## 📚 API Endpoints
-
-### `POST /upload`
-Upload a PDF or text document for processing.
-
-**Request**: Multipart form data with `file` field
-
-**Response**:
-```json
-{
-  "message": "Document 'example.pdf' uploaded and processed successfully",
-  "chunks": 15,
-  "total_documents": 15
-}
-```
-
-### `POST /ask`
-Ask a question about uploaded documents.
-
-**Request**:
-```json
-{
-  "question": "What is the main topic of this document?"
-}
-```
-
-**Response**:
-```json
-{
-  "answer": "Based on the document, the main topic is...",
-  "sources": [
-    "[Document Excerpt 1]: ...",
-    "[Document Excerpt 2]: ..."
-  ]
-}
-```
-
-### `GET /status`
-Get the status of the vector database.
-
-**Response**:
-```json
-{
-  "status": "running",
-  "documents_in_db": 15,
-  "message": "AI Chatbot RAG API is operational"
-}
-```
-
-### `DELETE /clear`
-Clear all documents from the vector database.
-
-## 🎯 Usage Guide
-
-1. **Start the backend server** (see instructions above)
-
-2. **Open the frontend** in your browser at `http://localhost:8000/`
-
-3. **Upload a document**:
-   - Click "Choose a PDF or Text file"
-   - Select a PDF or .txt file
-   - Click "Upload Document"
-   - Wait for processing confirmation
-
-4. **Ask questions**:
-   - Type your question in the input box
-   - Click "Ask" or press Enter
-   - View the answer and the document excerpts used
-
-## 🔍 How It Works
-
-1. **Document Upload**: When you upload a file, the system:
-   - Extracts text (PDFs are parsed, text files are read)
-   - Chunks the text into smaller pieces (1000 chars with 200 char overlap)
-   - Generates embeddings for each chunk using OpenAI
-   - Stores embeddings and text in FAISS vector database
-
-2. **Question Answering**: When you ask a question:
-   - System generates an embedding for your question
-   - Searches the vector database for similar document chunks (top 3)
-   - Sends the question + relevant chunks to GPT API
-   - Returns the generated answer along with source excerpts
-
-## 🛠️ Technology Stack
-
-- **Backend**: FastAPI (Python)
-- **Frontend**: HTML, CSS, JavaScript
-- **Vector Database**: FAISS (Facebook AI Similarity Search)
-- **Embeddings**: OpenAI text-embedding-3-small
-- **LLM**: OpenAI GPT-3.5-turbo (or GPT-4)
-- **PDF Processing**: PyPDF2
-
-## ⚙️ Configuration
-
-You can modify the following in the code:
-
-- **Chunk size**: Change `chunk_size` and `overlap` in `text_processor.py` or `main.py`
-- **Embedding model**: Change `model` parameter in `embeddings.py` (default: `text-embedding-3-small`)
-- **GPT model**: Change `model` in `gpt_client.py` (default: `gpt-3.5-turbo`)
-- **Number of results**: Change `k` parameter in `/ask` endpoint (default: 3)
-
-## 🐛 Troubleshooting
-
-### "OpenAI API key not found"
-- Make sure you've set the `OPENAI_API_KEY` environment variable
-- Or create a `.env` file with your API key
-
-### "No documents uploaded yet"
-- Upload at least one document before asking questions
-
-### Port 8000 already in use
-- Change the port: `uvicorn backend.main:app --reload --port 8001`
-- Update the `API_BASE_URL` in `frontend/app.js` to match
-
-### PDF extraction errors
-- Ensure the PDF is not corrupted or password-protected
-- Try converting the PDF to text format if issues persist
-
-### Import errors
-- Make sure all dependencies are installed: `pip install -r requirements.txt`
-- Ensure you're in the correct directory when running commands
-
-## 📝 Notes
-
-- The vector database is stored in `data/faiss_index.pkl` and persists between restarts
-- Uploaded files are saved in the `data/` directory
-- For production use, consider:
-  - Using environment-specific API keys
-  - Implementing authentication
-  - Adding rate limiting
-  - Using a production-grade ASGI server
-  - Setting proper CORS origins
-
-## 📄 License
-
-This project is open source and available for educational purposes.
 
 ---
 
-**Happy Chatting! 🚀**
+## 🐛 Troubleshooting
 
+### Port 8000 Already in Use
+```bash
+lsof -ti:8000 | xargs kill
+# Then restart the server
+```
+
+### Ollama Not Found
+- Install Ollama: `brew install ollama` (macOS) or visit https://ollama.ai/
+- The app will automatically use Hugging Face API as fallback
+
+### Model Download Issues
+- First-time embedding model download (~90MB) happens automatically
+- For Ollama, run: `ollama pull llama3.2`
+- Make sure you have internet connection for initial setup
+
+### Slow Performance
+- Close other applications to free up RAM
+- Use smaller Ollama models (e.g., `phi3` instead of `llama3.2`)
+- Processing large PDFs may take a minute or two
+
+### Import Errors
+- Make sure virtual environment is activated
+- Run: `pip install -r requirements_free.txt`
+- Restart the server after installing dependencies
+
+---
+
+## 🚀 Performance Tips
+
+- **First Upload**: May take 30-60 seconds (model download + processing)
+- **Subsequent Uploads**: Usually 5-15 seconds
+- **Answer Generation**: 2-10 seconds depending on question complexity
+- **Memory Usage**: ~2-4GB RAM (with Ollama model loaded)
+
+---
+
+## 🛡️ Privacy & Security
+
+- ✅ All processing happens locally (with Ollama)
+- ✅ Your documents are stored only on your machine
+- ✅ No data is sent to external services (when using Ollama)
+- ✅ Free Hugging Face fallback is also free and respects privacy
+- ✅ No tracking or analytics
+
+---
+
+## 🎓 Learning Resources
+
+### Understanding RAG
+- **RAG** = Retrieval-Augmented Generation
+- Retrieves relevant information from documents
+- Uses that information to generate accurate answers
+- Combines the best of search and AI!
+
+### Key Concepts
+- **Embeddings**: Mathematical representations of text
+- **Vector Search**: Finding similar text using math
+- **Chunking**: Breaking documents into smaller pieces
+- **Context**: Providing relevant info to AI models
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest new features
+- Submit pull requests
+- Improve documentation
+
+---
+
+## 📄 License
+
+This project is open source and available for educational and commercial use.
+
+---
+
+## 🙏 Acknowledgments
+
+- **FastAPI** - Amazing Python web framework
+- **FAISS** - Facebook AI Similarity Search
+- **Sentence Transformers** - Free, local embeddings
+- **Ollama** - Local LLM platform
+- **Hugging Face** - Free AI models and APIs
+
+---
+
+## 💡 Future Enhancements
+
+Possible improvements (feel free to contribute!):
+- Support for more file formats (Word, Excel, etc.)
+- Chat history persistence
+- User authentication
+- Multi-language support
+- Better mobile responsiveness
+- Advanced search filters
+
+---
+
+## 📞 Support
+
+Having issues? Check the troubleshooting section above, or:
+- Review the API docs at `/docs` when server is running
+- Check server logs for error messages
+- Make sure all dependencies are installed correctly
+
+---
+
+**Ready to get started?** Run `./start_free.sh` and open `http://localhost:8000/` in your browser! 🚀
+
+**Happy Document Chatting!** 📚💬🤖

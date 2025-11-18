@@ -29,6 +29,7 @@ def generate_answer(question: str, context_chunks: List[str],
             "OpenAI API key not found. Please set OPENAI_API_KEY environment variable."
         )
     
+    # Initialize client without proxies parameter - only pass api_key
     client = OpenAI(api_key=api_key)
     
     # Combine context chunks
@@ -48,6 +49,7 @@ Question: {question}
 Please provide an answer based on the context above."""
     
     try:
+        from openai import APIError
         response = client.chat.completions.create(
             model=model,
             messages=[
@@ -60,6 +62,20 @@ Please provide an answer based on the context above."""
         
         return response.choices[0].message.content.strip()
     
+    except APIError as e:
+        if e.status_code == 429:
+            if "insufficient_quota" in str(e) or "quota" in str(e).lower():
+                raise ValueError(
+                    "OpenAI API quota exceeded. Please check your OpenAI account billing and quota. "
+                    "Visit https://platform.openai.com/account/billing to add credits or upgrade your plan."
+                )
+            else:
+                raise ValueError(
+                    f"OpenAI API rate limit exceeded. Please try again in a few moments. "
+                    f"Error: {str(e)}"
+                )
+        else:
+            raise ValueError(f"OpenAI API error: {str(e)}")
     except Exception as e:
         raise ValueError(f"Error generating answer with GPT: {str(e)}")
 

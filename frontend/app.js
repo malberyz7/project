@@ -47,6 +47,7 @@ uploadBtn.addEventListener('click', async () => {
         if (response.ok) {
             showStatus(data.message || 'Document uploaded successfully!', 'success');
             await checkDatabaseStatus();
+            await loadUploadedFiles(); // Refresh file list
             // Clear file input
             fileInput.value = '';
             uploadBtn.disabled = true;
@@ -85,8 +86,11 @@ async function handleQuestion() {
         welcomeMsg.remove();
     }
 
-    // Display user question
+    // Display user question first
     addMessage(question, 'question');
+    
+    // Scroll to show the question
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 
     // Show loading indicator
     const loadingId = addLoadingMessage();
@@ -106,14 +110,24 @@ async function handleQuestion() {
         removeLoadingMessage(loadingId);
 
         if (response.ok) {
-            // Display answer
-            addMessage(data.answer, 'answer', data.sources);
+            // Display answer - answer should be at the top
+            if (data.answer) {
+                addMessage(data.answer, 'answer', data.sources);
+            } else {
+                addMessage('Received empty answer from server', 'error');
+            }
         } else {
-            addMessage(`Error: ${data.detail || 'Failed to get answer'}`, 'error');
+            // Show clean error message
+            const errorMsg = data.detail || data.message || 'Failed to get answer';
+            addMessage(`Error: ${errorMsg}`, 'error');
         }
     } catch (error) {
         removeLoadingMessage(loadingId);
-        addMessage(`Error: ${error.message}`, 'error');
+        // Clean error message - remove HTML and extra characters
+        let errorMsg = error.message || 'Unknown error occurred';
+        errorMsg = errorMsg.replace(/<[^>]*>/g, ''); // Remove HTML tags
+        errorMsg = errorMsg.replace(/\s+/g, ' ').trim(); // Clean whitespace
+        addMessage(`Error: ${errorMsg}`, 'error');
     }
 }
 
@@ -151,37 +165,59 @@ function addMessage(content, type, sources = null) {
             <div class="question-bubble">${escapeHtml(content)}</div>
         `;
     } else if (type === 'answer') {
+        // Clean the content - remove any HTML that might have leaked in
+        let cleanContent = escapeHtml(content);
+        
+        // Remove any HTML tags that might have been included in error messages
+        cleanContent = cleanContent.replace(/<[^>]*>/g, '');
+        
         let sourcesHtml = '';
         if (sources && sources.length > 0) {
             sourcesHtml = `
                 <div class="sources-section">
                     <h4>📄 Document Excerpts Used:</h4>
-                    ${sources.map((source, idx) => `
+                    ${sources.map((source, idx) => {
+                        // Clean source text too
+                        let cleanSource = escapeHtml(source);
+                        cleanSource = cleanSource.replace(/<[^>]*>/g, '');
+                        return `
                         <div class="source-item">
                             <strong>Excerpt ${idx + 1}:</strong><br>
-                            ${escapeHtml(source.substring(0, 300))}${source.length > 300 ? '...' : ''}
+                            ${cleanSource.substring(0, 300)}${cleanSource.length > 300 ? '...' : ''}
                         </div>
-                    `).join('')}
+                    `;
+                    }).join('')}
                 </div>
             `;
         }
         messageDiv.innerHTML = `
             <div class="answer-bubble">
                 <strong>🤖 Answer:</strong><br>
-                ${escapeHtml(content)}
+                ${cleanContent}
                 ${sourcesHtml}
             </div>
         `;
     } else {
+        // Error message - clean up any HTML that might have leaked in
+        let cleanError = escapeHtml(content);
+        // Remove any HTML tags that might have been included
+        cleanError = cleanError.replace(/<[^>]*>/g, '');
+        // Remove excessive whitespace
+        cleanError = cleanError.replace(/\s+/g, ' ').trim();
+        
         messageDiv.innerHTML = `
             <div class="answer-bubble" style="background: #f8d7da; color: #721c24;">
-                ${escapeHtml(content)}
+                <strong>❌ Error:</strong><br>
+                ${cleanError}
             </div>
         `;
     }
 
     chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    // Scroll to bottom to show the latest message
+    setTimeout(() => {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 100);
 }
 
 function addLoadingMessage() {
@@ -214,4 +250,71 @@ function escapeHtml(text) {
 
 // Check database status on page load
 checkDatabaseStatus();
+loadUploadedFiles();
+
+// Load and display uploaded files
+async function loadUploadedFiles() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/files`);
+        const data = await response.json();
+        
+        const filesList = document.getElementById('uploadedFilesList');
+        const filesSection = document.getElementById('uploadedFilesSection');
+        
+        if (!response.ok || !data.files || data.files.length === 0) {
+            filesList.innerHTML = '<p class="no-files">No files uploaded yet.</p>';
+            return;
+        }
+        
+        filesList.innerHTML = '';
+        
+        data.files.forEach(file => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <div class="file-info">
+                    <span class="file-icon">📄</span>
+                    <span class="file-name">${escapeHtml(file.filename)}</span>
+                    <span class="file-chunks">${file.chunks} chunk(s)</span>
+                </div>
+                <button class="btn-delete" onclick="deleteFile('${escapeHtml(file.filename)}')" title="Delete file">
+                    🗑️
+                </button>
+            `;
+            filesList.appendChild(fileItem);
+        });
+        
+        filesSection.style.display = 'block';
+    } catch (error) {
+        console.error('Error loading files:', error);
+    }
+}
+
+// Delete a file
+async function deleteFile(filename) {
+    if (!confirm(`Are you sure you want to delete "${filename}"?`)) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/files/${encodeURIComponent(filename)}`, {
+            method: 'DELETE'
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            showStatus(data.message || 'File deleted successfully', 'success');
+            await loadUploadedFiles();
+            await checkDatabaseStatus();
+        } else {
+            showStatus(data.detail || 'Error deleting file', 'error');
+        }
+    } catch (error) {
+        showStatus(`Error: ${error.message}`, 'error');
+    }
+}
+
+// Make deleteFile available globally
+window.deleteFile = deleteFile;
 

@@ -170,6 +170,92 @@ section h2 {
     display: block;
 }
 
+/* Uploaded Files Section */
+.uploaded-files-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #f0f0f0;
+}
+
+.uploaded-files-section h3 {
+    color: #667eea;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.uploaded-files-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9ff;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.file-item:hover {
+    background: #eef0ff;
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(102, 126, 234, 0.2);
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.file-icon {
+    font-size: 1.5em;
+}
+
+.file-name {
+    font-weight: 600;
+    color: #333;
+    flex: 1;
+}
+
+.file-chunks {
+    font-size: 0.85em;
+    color: #666;
+    background: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.btn-delete {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+    background: #ff5252;
+    transform: scale(1.1);
+    box-shadow: 0 2px 5px rgba(255, 107, 107, 0.3);
+}
+
+.no-files {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
 /* Chat Section */
 .chat-section {
     min-height: 400px;

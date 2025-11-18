@@ -3,8 +3,12 @@ uvicorn[standard]==0.24.0
 python-multipart==0.0.6
 pydantic==2.5.0
 PyPDF2==3.0.1
-openai>=2.8.0
 faiss-cpu>=1.13.0
 numpy>=1.25.0
 python-dotenv==1.0.0
+# Free/local alternatives (NO OpenAI costs)
+sentence-transformers>=2.2.0
+torch>=2.0.0
+ollama>=0.1.0
+requests>=2.31.0
 
