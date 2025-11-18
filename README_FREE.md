@@ -15,7 +15,27 @@ This is a completely FREE version that uses:
 
 ## 🚀 Quick Start (FREE Version)
 
-### 1. Install Dependencies
+### Prerequisites
+
+- Python 3.8 or higher
+- pip (Python package manager)
+- (Optional) Ollama for best performance - see [INSTALL_OLLAMA.md](INSTALL_OLLAMA.md)
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/malberyz7/project.git
+cd project
+```
+
+### 2. Create Virtual Environment (Recommended)
+
+```bash
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements_free.txt
@@ -23,13 +43,19 @@ pip install -r requirements_free.txt
 
 **Note:** This will download:
 - PyTorch (~2GB)
-- Sentence Transformers model (~90MB, downloaded automatically on first use)
+- Sentence Transformers model (`all-MiniLM-L6-v2`, ~90MB, downloaded automatically on first use)
 
-### 2. Optional: Install Ollama (for local LLM)
+### 4. Optional: Install Ollama (for local LLM)
 
-For the best experience, install Ollama for local LLM:
+For the best experience and privacy, install Ollama for local LLM:
 
-**macOS/Linux:**
+**macOS (Recommended):**
+```bash
+brew install ollama
+ollama pull llama3.2
+```
+
+**macOS/Linux (Alternative):**
 ```bash
 curl https://ollama.ai/install.sh | sh
 ollama pull llama3.2
@@ -37,9 +63,11 @@ ollama pull llama3.2
 
 **Windows:** Download from https://ollama.ai/
 
+See [INSTALL_OLLAMA.md](INSTALL_OLLAMA.md) for detailed installation instructions.
+
 If Ollama is not installed, the app will automatically use Hugging Face Inference API (free tier).
 
-### 3. Start the Server
+### 5. Start the Server
 
 ```bash
 ./start_free.sh
@@ -52,9 +80,13 @@ cd backend
 uvicorn main_free:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### 4. Open Your Browser
+### 6. Open Your Browser
 
 Go to: `http://localhost:8000/`
+
+**Also available:**
+- API Documentation: `http://localhost:8000/docs`
+- Status Check: `http://localhost:8000/status`
 
 ## 📊 Differences from Paid Version
 
@@ -83,12 +115,39 @@ If Ollama is not available, the app automatically uses Hugging Face Inference AP
 - Works immediately
 - Free tier (may have rate limits)
 
+## 🎯 Features
+
+### Core Capabilities
+- ✅ **Document Upload**: Upload PDF or text files easily
+- ✅ **Smart Q&A**: Ask questions in natural language
+- ✅ **RAG Technology**: Uses Retrieval-Augmented Generation for accurate answers
+- ✅ **Source Tracking**: See which document excerpts were used for each answer
+- ✅ **File Management**: List and delete uploaded files
+- ✅ **Local Processing**: Everything runs locally (with Ollama) or uses free APIs
+
+### API Endpoints
+
+The backend provides a RESTful API:
+
+- `POST /upload` - Upload and process a document
+- `POST /ask` - Ask a question about uploaded documents
+- `GET /files` - List all uploaded files
+- `DELETE /files/{filename}` - Delete a specific file
+- `GET /status` - Check server and database status
+- `DELETE /clear` - Clear all documents (for testing)
+
+**Interactive API Docs**: Visit `http://localhost:8000/docs` when the server is running!
+
 ## 📝 Notes
 
-- **First run:** The embedding model (~90MB) will be downloaded automatically
+- **First run:** The embedding model (`all-MiniLM-L6-v2`, ~90MB) will be downloaded automatically
 - **Memory:** Ollama models need 4-8GB RAM (depending on model size)
+  - `llama3.2`: ~2-3GB RAM
+  - `phi3`: ~2-3GB RAM
+  - Larger models like `mistral`: 8GB+ RAM
 - **Internet:** Required only for first download and Hugging Face API
 - **Performance:** Local models are fast but may be slightly slower than cloud APIs
+- **Embedding Model:** Uses `all-MiniLM-L6-v2` (384-dimensional embeddings, free and lightweight)
 
 ## 🆚 Which Version Should I Use?
 
@@ -113,12 +172,26 @@ The model downloads automatically on first use. Make sure you have internet conn
 Install Ollama: https://ollama.ai/ or the app will use Hugging Face instead.
 
 ### Slow performance
-- Make sure Ollama is running locally
+- Make sure Ollama is running locally (`ollama list` should work)
 - Close other applications to free up RAM
-- Use smaller Ollama models (llama3.2 instead of llama3.1)
+- Use smaller Ollama models (`llama3.2` or `phi3` instead of larger models)
+- First-time processing is slower (embedding model download)
 
 ### Hugging Face API errors
-Some models may be loading. Wait a few seconds and try again, or install Ollama for local use.
+- Some models may be loading. Wait a few seconds and try again.
+- If you get authentication errors (401), install Ollama for local use instead.
+- The app will automatically fall back to Ollama if available.
+
+### Port 8000 Already in Use
+```bash
+lsof -ti:8000 | xargs kill
+# Then restart the server
+```
+
+### File Deletion Not Working
+- Make sure you're using the correct filename (case-sensitive)
+- Check that the file exists using `GET /files` endpoint
+- Verify the server is running and has write permissions in the `data/` directory
 
 ---
 

@@ -109,8 +109,13 @@ Imagine having a smart assistant that has read all your documents and can answer
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
-   cd project-1
+   git clone https://github.com/malberyz7/project.git
+   cd project
+   ```
+   
+   Or if you already have it:
+   ```bash
+   cd project-1  # or whatever you named the folder
    ```
 
 2. **Create a virtual environment** (recommended)
@@ -158,10 +163,11 @@ Imagine having a smart assistant that has read all your documents and can answer
 ## 🎯 Usage
 
 ### Step 1: Upload Documents
-1. Click on the upload area or "Upload PDF" button
+1. Click on the upload area (shows "Upload PDF")
 2. Select a PDF or text file from your computer
 3. Wait for processing (usually just a few seconds)
 4. See confirmation that your document is ready
+5. Uploaded files appear in the "Uploaded Files" section below
 
 ### Step 2: Ask Questions
 1. Type your question in the input box
@@ -228,25 +234,31 @@ We provide two versions:
 project-1/
 ├── backend/
 │   ├── main.py              # Paid version (OpenAI)
-│   └── main_free.py         # Free version (local models)
+│   └── main_free.py         # Free version (local models) ⭐ Recommended
 ├── frontend/
 │   ├── index.html           # Main web interface
 │   ├── styles.css           # Beautiful styling
 │   └── app.js               # Frontend logic
 ├── utils/
+│   ├── __init__.py          # Package initialization
 │   ├── pdf_extractor.py     # PDF text extraction
-│   ├── text_processor.py    # Text chunking
-│   ├── embeddings_free.py   # Free embeddings (Sentence Transformers)
+│   ├── text_processor.py    # Text chunking utilities
+│   ├── embeddings_free.py   # Free embeddings (Sentence Transformers) ⭐
 │   ├── embeddings.py        # Paid embeddings (OpenAI)
-│   ├── vector_db.py         # FAISS database wrapper
-│   ├── gpt_client_free.py   # Free LLM client (Ollama/HF)
+│   ├── vector_db.py         # FAISS database wrapper with delete support
+│   ├── gpt_client_free.py   # Free LLM client (Ollama/HF) ⭐
 │   └── gpt_client.py        # Paid LLM client (OpenAI)
-├── data/                    # Uploaded files and database
+├── data/                    # Uploaded files and vector database storage
+│   └── .gitkeep             # Keeps directory in git
 ├── requirements.txt         # Dependencies (paid version)
-├── requirements_free.txt    # Dependencies (free version)
+├── requirements_free.txt    # Dependencies (free version) ⭐ Use this!
 ├── start.sh                 # Startup script (paid version)
-├── start_free.sh            # Startup script (free version)
+├── start_free.sh            # Startup script (free version) ⭐ Use this!
+├── INSTALL_OLLAMA.md        # Guide for installing Ollama
+├── README_FREE.md           # Additional free version documentation
 └── README.md                # This file!
+
+⭐ = Free version components (recommended)
 ```
 
 ---
