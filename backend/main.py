@@ -1,5 +1,9 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from starlette.responses import FileResponse
+from pathlib import Path
+import os
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict
@@ -63,6 +67,13 @@ def health():
     return {"status": "ok"}
 
 
-@app.get("/")
-def root():
-    return RedirectResponse(url="/docs")
+# Serve frontend static build if it exists (frontend/dist)
+BASE_DIR = Path(__file__).resolve().parent.parent
+DIST_DIR = BASE_DIR / "frontend" / "dist"
+if DIST_DIR.exists():
+    # Mount the built frontend at the root. API routes take precedence.
+    app.mount("/", StaticFiles(directory=str(DIST_DIR), html=True), name="frontend")
+else:
+    @app.get("/")
+    def root():
+        return RedirectResponse(url="/docs")
