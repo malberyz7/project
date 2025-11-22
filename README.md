@@ -1,6 +1,8 @@
 # 🤖 AI Chatbot with RAG - Document Q&A System
 
-A powerful, **completely free** AI-powered chatbot that answers questions about your uploaded documents using Retrieval-Augmented Generation (RAG). Upload PDFs, ask questions, and get intelligent answers - all without any API costs!
+A powerful AI-powered chatbot that answers questions about your uploaded documents using Retrieval-Augmented Generation (RAG). Upload PDFs, ask questions, and get intelligent answers! 
+
+**Includes both FREE and paid versions** - the free version uses local models with zero API costs, while the paid version uses OpenAI for premium quality.
 
 ---
 
@@ -191,14 +193,17 @@ Imagine having a smart assistant that has read all your documents and can answer
 
 ## 🔍 API Endpoints
 
-The backend provides a RESTful API:
+The backend provides a RESTful API. **Note:** Some endpoints are only available in the free version:
 
+### Common Endpoints (Both Versions)
 - `POST /upload` - Upload and process a document
 - `POST /ask` - Ask a question about uploaded documents
-- `GET /files` - List all uploaded files
-- `DELETE /files/{filename}` - Delete a specific file
 - `GET /status` - Check server and database status
 - `DELETE /clear` - Clear all documents (for testing)
+
+### Free Version Only (`main_free.py`)
+- `GET /files` - List all uploaded files with details
+- `DELETE /files/{filename}` - Delete a specific file and its chunks
 
 **Interactive API Docs**: Visit `http://localhost:8000/docs` when the server is running!
 
@@ -215,14 +220,16 @@ We provide two versions:
 - **Cost**: $0
 - **Privacy**: High (local processing)
 - **Setup**: Requires model download (~90MB for embeddings, ~2GB for Ollama)
+- **Features**: Includes file management endpoints (`GET /files`, `DELETE /files/{filename}`)
 
 ### 💳 Paid Version (Optional)
 - **Location**: `backend/main.py`
-- **Embeddings**: OpenAI API
-- **LLM**: OpenAI GPT
+- **Embeddings**: OpenAI API (requires `OPENAI_API_KEY`)
+- **LLM**: OpenAI GPT (requires `OPENAI_API_KEY`)
 - **Cost**: ~$0.01-0.10 per document
 - **Privacy**: Medium (cloud processing)
-- **Setup**: Just needs API key
+- **Setup**: Just needs API key in `.env` file
+- **Features**: Basic endpoints only (no file management endpoints)
 
 **The free version is fully functional and recommended for most users!**
 

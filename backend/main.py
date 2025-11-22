@@ -59,7 +59,7 @@ class QuestionResponse(BaseModel):
 # Serve frontend static files (CSS, JS, etc.)
 frontend_path = BASE_DIR / "frontend"
 if frontend_path.exists():
-    app.mount("/static", StaticFiles(directory="frontend"), name="static")
+    app.mount("/static", StaticFiles(directory=str(frontend_path)), name="static")
     
     # Serve CSS and JS files
     @app.get("/styles.css")
