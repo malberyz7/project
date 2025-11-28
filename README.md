@@ -250,32 +250,32 @@ We provide two versions:
 ```
 project-1/
 ├── backend/
-│   ├── main.py              # Paid version (OpenAI)
-│   └── main_free.py         # Free version (local models) ⭐ Recommended
+│   ├── main.py             
+│   └── main_free.py         
 ├── frontend/
-│   ├── index.html           # Main web interface
-│   ├── styles.css           # Beautiful styling
-│   └── app.js               # Frontend logic
+│   ├── index.html           
+│   ├── styles.css           
+│   └── app.js              
 ├── utils/
-│   ├── __init__.py          # Package initialization
-│   ├── pdf_extractor.py     # PDF text extraction
-│   ├── text_processor.py    # Text chunking utilities
-│   ├── embeddings_free.py   # Free embeddings (Sentence Transformers) ⭐
-│   ├── embeddings.py        # Paid embeddings (OpenAI)
-│   ├── vector_db.py         # FAISS database wrapper with delete support
-│   ├── gpt_client_free.py   # Free LLM client (Ollama/HF) ⭐
-│   └── gpt_client.py        # Paid LLM client (OpenAI)
-├── data/                    # Uploaded files and vector database storage
-│   └── .gitkeep             # Keeps directory in git
-├── requirements.txt         # Dependencies (paid version)
-├── requirements_free.txt    # Dependencies (free version) ⭐ Use this!
-├── start.sh                 # Startup script (paid version)
-├── start_free.sh            # Startup script (free version) ⭐ Use this!
-├── INSTALL_OLLAMA.md        # Guide for installing Ollama
-├── README_FREE.md           # Additional free version documentation
-└── README.md                # This file!
+│   ├── __init__.py         
+│   ├── pdf_extractor.py    
+│   ├── text_processor.py  
+│   ├── embeddings_free.py   
+│   ├── embeddings.py       
+│   ├── vector_db.py       
+│   ├── gpt_client_free.py  
+│   └── gpt_client.py       
+├── data/                  
+│   └── .gitkeep            
+├── requirements.txt       
+├── requirements_free.txt   
+├── start.sh               
+├── start_free.sh            
+├── INSTALL_OLLAMA.md       
+├── README_FREE.md          
+└── README.md                
 
-⭐ = Free version components (recommended)
+
 ```
 
 ---
@@ -370,17 +370,6 @@ This project is open source and available for educational and commercial use.
 
 ---
 
-## 💡 Future Enhancements
-
-Possible improvements (feel free to contribute!):
-- Support for more file formats (Word, Excel, etc.)
-- Chat history persistence
-- User authentication
-- Multi-language support
-- Better mobile responsiveness
-- Advanced search filters
-
----
 
 ## 📞 Support
 
